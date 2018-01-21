@@ -1,0 +1,28 @@
+MEMORY 
+{
+   bram : ORIGIN = 0x00000000, LENGTH = 0x00020000
+}
+
+SECTIONS
+{
+   .all : /* code, initialized data, and small bss */
+       {
+          boot.o(.text)
+          *(.text)
+          _etext = ALIGN(4);
+          *(.rodata)
+          *(.data)
+          *(.sdata)
+          _edata = ALIGN(4);
+          *(.sbss)
+        } > bram
+
+   .bss : /* blank static storage */
+        {
+          *(.bss)
+          _end = ALIGN(4);
+        } > bram
+
+   /* TODO: find suitable address for stack, this one won't work */
+_stack_top  = 0x0001FFFC;
+}
